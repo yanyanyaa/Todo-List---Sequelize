@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 const app = express()
 const PORT = process.env.PORT
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname:'.hbs' }))
-app.set('view engin', 'hbs')
+app.set('view engine', 'hbs')
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }))
 app.use(routes)
