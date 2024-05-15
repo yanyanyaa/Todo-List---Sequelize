@@ -84,8 +84,21 @@ router.put('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// router.delete('/:id', (req, res) => {
-
-// })
+router.delete('/:id', (req, res) => {
+  const UserId = req.user.id
+  const id = req.params.id
+  return User.findByPk(UserId)
+    .then(user => {
+      if (!user) {
+        throw new Error
+      }
+      return Todo.findOne({
+        where: { id, UserId }
+      })
+    })
+    .then(todo => todo.destroy())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
 
 module.exports = router
