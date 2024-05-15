@@ -1,11 +1,15 @@
 const express = require('express')
 const router = express.Router()
+const db = require('../../models')
+const Todo = db.Todo
 
-// 載入資料
-
-// 路由設定
 router.get('/', (req, res) => {
-  res.send('hello world')
+  return Todo.findAll({
+    raw: true,
+    nest: true
+  })
+    .then(todos => res.render('index', { todos }))
+    .catch(error => { return res.status(422).json(error) })
 })
 
 module.exports = router
