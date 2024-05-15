@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-
-// 載入資料
+const db = require('../../models')
+const Todo = db.Todo
 
 // 路由設定
 // router.get('/new', (req, res) => {
@@ -12,10 +12,12 @@ const router = express.Router()
 
 // })
 
-// router.get('/:id', (req, res) => {
-//   res.render('detail')
-
-// })
+router.get('/:id', (req, res) => {
+  const id = req.params.id
+  return Todo.findByPk(id)
+    .then(todo => res.render('detail', { todo: todo.toJSON() }))
+    .catch(error => console.log(error))
+})
 
 // router.get('/:id/edit', (req, res) => {
 //   res.render('edit')
