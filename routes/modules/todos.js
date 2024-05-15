@@ -5,13 +5,26 @@ const Todo = db.Todo
 const User = db.User
 
 // 路由設定
-// router.get('/new', (req, res) => {
-//   res.render('new')
-// })
+router.get('/new', (req, res) => {
+  res.render('new')
+})
 
-// router.post('/', (req, res) => {
-
-// })
+router.post('/', (req, res) => {
+  const UserId = req.user.id
+  const name = req.body.name
+  return User.findByPk(UserId)
+    .then(user => {
+      if (!user) {
+        throw new Error('user not found!')
+      }
+      return Todo.create({
+        name,
+        UserId
+      })
+    })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
 
 router.get('/:id', (req, res) => {
   const UserId = req.user.id
@@ -22,7 +35,7 @@ router.get('/:id', (req, res) => {
         throw new Error('user not found!')
       }
       return Todo.findOne({
-        where: { UserId}
+        where: { id, UserId }
       })
     })
     .then(todo => {
