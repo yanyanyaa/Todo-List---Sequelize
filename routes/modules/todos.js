@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require('../../models')
 const Todo = db.Todo
+const User = db.User
 
 // 路由設定
 // router.get('/new', (req, res) => {
@@ -13,9 +14,20 @@ const Todo = db.Todo
 // })
 
 router.get('/:id', (req, res) => {
+  const UserId = req.user.id
   const id = req.params.id
-  return Todo.findByPk(id)
-    .then(todo => res.render('detail', { todo: todo.toJSON() }))
+  return User.findByPk(UserId)
+    .then(user => {
+      if (!user) {
+        throw new Error('user not found!')
+      }
+      return Todo.findOne({
+        where: { UserId}
+      })
+    })
+    .then(todo => {
+      res.render('detail', { todo: todo.toJSON() })
+    })
     .catch(error => console.log(error))
 })
 
